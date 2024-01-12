@@ -1,23 +1,22 @@
 require 'scorecard'
 
 RSpec.describe Scorecard do
-  before(:each) do
-    scorecard = Scorecard.new
-  end
-
   describe 'Adding a frame' do
     context 'When a valid frame is added' do 
       it 'Should successfully add the frame without error' do
+        scorecard = Scorecard.new
         expect { scorecard.add_frame(1, 4) }.not_to raise_error
       end
 
       it 'Should increase the frame count after two frames have been played' do
+        scorecard = Scorecard.new
         scorecard.add_frame(1, 4)
         scorecard.add_frame(2, 4)
         expect(scorecard.current_frame).to eq(2)
       end
 
       it 'Should increase the frame count if a strike has been played' do 
+        scorecard = Scorecard.new
         scorecard.add_frame(1, 10)
         expect(scorecard.current_frame).to eq(2)
       end
