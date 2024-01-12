@@ -35,13 +35,13 @@ RSpec.describe Scorecard do
         expect { @scorecard.add_frame(3, 4) }.to raise_error(ArgumentError, "Roll cannot be greater than 2 on a standard frame.")
       end
 
-    #   it 'Should return an error if the frame is passed a roll thats not an integer.' do 
-    #     expect{ (scorecard.add_frame("1", 4)) }.to raise_error(ArgumentError, "")
-    #   end
+      it 'Should return an error if the frame is passed a roll thats not an integer.' do 
+        expect{ (@scorecard.add_frame("1", 4)) }.to raise_error(ArgumentError, "Score and roll must be Integer data types.")
+      end
 
-    #   it 'Should return an error if the frame is passed a score that is not an integer.' do
-    #     expect{ (scorecard.add_frame(1, "4")) }.to raise_error(ArgumentError, "")
-    #   end
+      it 'Should return an error if the frame is passed a score that is not an integer.' do
+        expect{ (@scorecard.add_frame(1, "4")) }.to raise_error(ArgumentError, "Score and roll must be Integer data types.")
+      end
     end
   end
 
