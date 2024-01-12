@@ -1,40 +1,39 @@
 require 'scorecard'
 
 RSpec.describe Scorecard do
+
+  before(:each) do
+    @scorecard = Scorecard.new
+  end
+
   describe 'Adding a frame' do
     context 'When a valid frame is added' do 
       it 'Should successfully add the frame without error' do
-        scorecard = Scorecard.new
-        expect { scorecard.add_frame(1, 4) }.not_to raise_error
+        expect { @scorecard.add_frame(1, 4) }.not_to raise_error
       end
 
       it 'Should increase the frame count after two frames have been played' do
-        scorecard = Scorecard.new
-        scorecard.add_frame(1, 4)
-        scorecard.add_frame(2, 4)
-        expect(scorecard.current_frame).to eq(2)
+        @scorecard.add_frame(1, 4)
+        @scorecard.add_frame(2, 4)
+        expect(@scorecard.current_frame).to eq(2)
       end
 
       it 'Should increase the frame count if a strike has been played' do 
-        scorecard = Scorecard.new
-        scorecard.add_frame(1, 10)
-        expect(scorecard.current_frame).to eq(2)
+        @scorecard.add_frame(1, 10)
+        expect(@scorecard.current_frame).to eq(2)
       end
     end
 
+    context 'When the frame is invalid' do 
+      it 'Should return an error if the frame includes a score that is invalid' do 
+        expect { @scorecard.add_frame(1, 11) }.to raise_error(ArgumentError, "Score cannot exceed 10 in one roll")
+      end
 
-    # Add further tests and uncomment after above tests pass 
-
-    # context 'When the frame is invalid' do 
-    #   it 'Should return an error if the frame includes a score that is invalid' do 
-    #     expect { scorecard.add_frame(1, 11) }.to raise_error(ArgumentError, "Score cannot exceed 10 in one roll")
-    #   end
-
-    #   it "Should return an error if the frame includes a roll thats invalid." do
-    #     scorecard.add_frame(1, 4)
-    #     scorecard.add_frame(2, 4)
-    #     scorecard.add_frame(3, 4)
-    #   end
+      it "Should return an error if the frame includes a roll thats invalid." do
+        @scorecard.add_frame(1, 4)
+        @scorecard.add_frame(2, 4)
+        expect { @scorecard.add_frame(3, 4) }.to raise_error(ArgumentError, "Roll cannot be greater than 2 on a standard frame.")
+      end
 
     #   it 'Should return an error if the frame is passed a roll thats not an integer.' do 
     #     expect{ (scorecard.add_frame("1", 4)) }.to raise_error(ArgumentError, "")
@@ -43,7 +42,7 @@ RSpec.describe Scorecard do
     #   it 'Should return an error if the frame is passed a score that is not an integer.' do
     #     expect{ (scorecard.add_frame(1, "4")) }.to raise_error(ArgumentError, "")
     #   end
-    # end
+    end
   end
 
   # context 'Calculating a score' do 

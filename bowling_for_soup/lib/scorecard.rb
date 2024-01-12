@@ -12,9 +12,9 @@ class Scorecard
   end
 
   def add_frame(roll, score)
-    raise ArguemntError.new("Score cannot exceed 10 in one roll") if score > 10
+    raise ArgumentError.new("Score cannot exceed 10 in one roll") if score > 10
     raise ArgumentError.new("Roll cannot be greater than 2 on a standard frame.") if roll > 2
-
+    
     if roll == 2 || (roll == 1 && score == 10)
       @current_frame += 1
     end
