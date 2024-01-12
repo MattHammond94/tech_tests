@@ -12,9 +12,7 @@ class Scorecard
   end
 
   def add_frame(roll, score)
-    raise ArgumentError.new("Score and roll must be Integer data types.") if !(roll.is_a?(Integer)) || !score.is_a?(Integer)
-    raise ArgumentError.new("Score cannot exceed 10 in one roll") if score > 10
-    raise ArgumentError.new("Roll cannot be greater than 2 on a standard frame.") if roll > 2
+    error_catcher(roll, score)
 
     if roll == 2 || (roll == 1 && score == 10)
       @current_frame += 1
@@ -23,5 +21,21 @@ class Scorecard
 
   def calculate_score 
     @bonus_points + @total_score
+  end
+
+  private 
+
+  def error_catcher(roll, score)
+    if !(roll.is_a?(Integer)) || !score.is_a?(Integer)
+      error = "Score and roll must be Integer data types."
+    elsif score > 10
+      error = "Score cannot exceed 10 in one roll"
+    elsif roll > 2
+      error = "Roll cannot be greater than 2 on a standard frame."
+    else 
+      error = ""
+    end
+
+    raise ArgumentError.new(error) if !error.empty?
   end
 end
