@@ -1,7 +1,6 @@
 require 'scorecard'
 
 RSpec.describe Scorecard do
-
   before(:each) do
     @scorecard = Scorecard.new
   end
@@ -49,34 +48,31 @@ RSpec.describe Scorecard do
     end
   end
 
-  # context 'Calculating a score' do 
-  #   it 'Should return a score of 0 if no frames have been added.' do 
-  #     scorecard = Scorecard.new
-  #     expect(scorecard.calculate_score).to eq(0)
-  #   end
+  context 'Calculating a score' do 
+    it 'Should return a score of 0 if no frames have been added.' do 
+      expect(@scorecard.calculate_score).to eq(0)
+    end
 
-  #   it 'Should return the correct score after a frame has been added' do
-  #     scorecard = Scorecard.new
-  #     scorecard.add_frame(1, 4)
-  #     expect(scorecard.calculate_score).to eq(4)
-  #   end
+    it 'Should return the correct score after a frame has been added' do
+      @scorecard.add_frame(1, 4)
+      expect(@scorecard.calculate_score).to eq(4)
+    end
 
-  #   it 'Should return the correct score after a set amount of frames.' do
-  #     scorecard = Scorecard.new
-  #     scorecard.add_frame(1, 4)
-  #     scorecard.add_frame(2, 4)
-  #     scorecard.add_frame(1, 6)
-  #     scorecard.add_frame(2, 1)
-  #     scorecard.add_frame(1, 3)
-  #     expect(scorecard.calculate_score).to eq(18)
-  #   end
+    it 'Should return the correct score after a set amount of frames.' do
+      @scorecard.add_frame(1, 4)
+      @scorecard.add_frame(2, 4)
+      @scorecard.add_frame(1, 6)
+      @scorecard.add_frame(2, 1)
+      @scorecard.add_frame(1, 3)
+      expect(@scorecard.calculate_score).to eq(18)
+    end
 
-  #   it 'Should return the correct score after a strike has been played' do
-  #     scorecard = Scorecard.new
-  #     scorecard.add_frame(1, 4)
-  #     scorecard.add_frame(2, 4)
-  #     expect(scorecard.calculate_score).to eq(18)
-  #   end
+    it 'Should return the correct score after a strike has been played' do
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 4)
+      @scorecard.add_frame(2, 5)
+      expect(@scorecard.calculate_score).to eq(28)
+    end
 
   #   it 'Should return the correct score after a spare has been played' do 
   #     scorecard = Scorecard.new
@@ -93,5 +89,5 @@ RSpec.describe Scorecard do
     # Gutter game 
 
     # Round 10 spare 
-  # end
+  end
 end

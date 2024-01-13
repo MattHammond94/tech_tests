@@ -14,7 +14,17 @@ class Scorecard
   def add_frame(roll, score)
     error_catcher(roll, score)
 
-    if roll == 2 || (roll == 1 && score == 10)
+    @bonus_points += score if @strike_round
+
+    if roll == 1 && score == 10
+      @total_score += 10
+      @current_frame += 1
+      @strike_round = true
+    else 
+      @total_score += score
+    end
+
+    if roll == 2
       @current_frame += 1
     end
   end
@@ -23,7 +33,7 @@ class Scorecard
     @bonus_points + @total_score
   end
 
-  private 
+  private
 
   def error_catcher(roll, score)
     if !(roll.is_a?(Integer)) || !score.is_a?(Integer)
