@@ -14,13 +14,25 @@ class Scorecard
   def add_frame(roll, score)
     error_catcher(roll, score)
 
+    if @spare_round && roll == 1 
+      @bonus_points += score
+      @active_frame_score += score
+      @spare_round = false
+    end
+
     @bonus_points += score if @strike_round
 
     if roll == 1 && score == 10
       @total_score += 10
       @current_frame += 1
       @strike_round = true
-    else 
+    elsif roll == 2 && @active_frame_score + score == 10
+      #SPARE! 
+      @total_score += score 
+      @active_frame_score = 0
+      @spare_round = true
+    else
+      @active_frame_score += score
       @total_score += score
     end
 

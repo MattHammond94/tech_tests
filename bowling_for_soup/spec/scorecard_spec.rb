@@ -74,11 +74,13 @@ RSpec.describe Scorecard do
       expect(@scorecard.calculate_score).to eq(28)
     end
 
-  #   it 'Should return the correct score after a spare has been played' do 
-  #     scorecard = Scorecard.new
-  #     scorecard.add_frame(1, 10)
-  #     expect(scorecard.calculate_score).to eq()
-  #   end
+    it 'Should return the correct score after a spare has been played' do 
+      @scorecard.add_frame(1, 3)
+      @scorecard.add_frame(2, 7)
+      @scorecard.add_frame(1, 6)
+      @scorecard.add_frame(2, 2)
+      expect(@scorecard.calculate_score).to eq(24)
+    end
 
     # Score after multiple strikes
 
