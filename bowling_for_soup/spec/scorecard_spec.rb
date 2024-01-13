@@ -50,8 +50,6 @@ RSpec.describe Scorecard do
     # Need to add logic for the possibility of a third round on bonus frame. 
     # Check that no error is returned on final round if there IS a bonus round 
     # Check there is an error if there IS a bonus round but roll is greater than 3
-
-    # check that the roll after a strike is always a 1 
   end
 
   context 'Calculating a score' do 
@@ -92,7 +90,7 @@ RSpec.describe Scorecard do
       @scorecard.add_frame(1, 10)
       @scorecard.add_frame(1, 4)
       @scorecard.add_frame(2, 5)
-      @scorecard.add_frame(1, 10)  
+      @scorecard.add_frame(1, 10)
       @scorecard.add_frame(1, 6)
       @scorecard.add_frame(2, 2)
       @scorecard.add_frame(1, 3) 
@@ -100,7 +98,20 @@ RSpec.describe Scorecard do
       expect(@scorecard.calculate_score).to eq(60)
     end
 
-    # Score after multiple spares 
+    it 'Should return the correct score after multiple spares has been played' do 
+      @scorecard.add_frame(1, 3)
+      @scorecard.add_frame(2, 7)
+      @scorecard.add_frame(1, 6)
+      @scorecard.add_frame(2, 2)
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      @scorecard.add_frame(1, 2)
+      @scorecard.add_frame(2, 3)
+      p @scorecard.total_score
+      p @scorecard.bonus_points
+      # bonus_points should be 8 total => currently returning 6 bonus points are only be applied after the first spare.
+      expect(@scorecard.calculate_score).to eq(41)
+    end
 
     # Score after a strike then a spare then a normal frame 
 

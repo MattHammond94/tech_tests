@@ -1,6 +1,6 @@
 class Scorecard
 
-  attr_reader :current_frame
+  attr_reader :current_frame, :total_score, :bonus_points
 
   def initialize
     @current_frame = 1
@@ -14,36 +14,32 @@ class Scorecard
   def add_frame(roll, score)
     error_catcher(roll, score)
 
-    if @spare_round && roll == 1 
+    if @spare_round && roll == 1
       @bonus_points += score
       @active_frame_score += score
       @spare_round = false
     end
 
-    @bonus_points += score if @strike_round
+    if @strike_round
+      @bonus_points += score
+    end
 
     if @strike_round && roll == 2
       @strike_round = false
     end
 
-
     if roll == 1 && score == 10
-      #STRIKE!
-      @total_score += 10
-      @current_frame += 1
-      @strike_round = true
+      strike
     elsif roll == 2 && @active_frame_score + score == 10
-      #SPARE! 
-      @total_score += score 
-      @active_frame_score = 0
-      @spare_round = true
+      spare(score)
     else
+      # STANDARD ROLL
       @active_frame_score += score
       @total_score += score
     end
 
     if roll == 2
-      @current_frame += 1
+      end_frame
     end
   end
 
@@ -52,6 +48,23 @@ class Scorecard
   end
 
   private
+
+  def strike 
+    @total_score += 10
+    @current_frame += 1
+    @strike_round = true
+  end
+
+  def spare(score)
+    @total_score += score 
+    @active_frame_score = 0
+    @spare_round = true
+  end
+
+  def end_frame
+    @current_frame += 1
+    @active_frame_score = 0
+  end
 
   def error_catcher(roll, score)
     if !(roll.is_a?(Integer)) || !score.is_a?(Integer)
