@@ -22,7 +22,13 @@ class Scorecard
 
     @bonus_points += score if @strike_round
 
+    if @strike_round && roll == 2
+      @strike_round = false
+    end
+
+
     if roll == 1 && score == 10
+      #STRIKE!
       @total_score += 10
       @current_frame += 1
       @strike_round = true

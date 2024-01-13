@@ -46,6 +46,12 @@ RSpec.describe Scorecard do
         expect{ (@scorecard.add_frame(nil, nil)) }.to raise_error(ArgumentError, "Score and roll must be Integer data types.")
       end
     end
+
+    # Need to add logic for the possibility of a third round on bonus frame. 
+    # Check that no error is returned on final round if there IS a bonus round 
+    # Check there is an error if there IS a bonus round but roll is greater than 3
+
+    # check that the roll after a strike is always a 1 
   end
 
   context 'Calculating a score' do 
@@ -82,11 +88,29 @@ RSpec.describe Scorecard do
       expect(@scorecard.calculate_score).to eq(24)
     end
 
-    # Score after multiple strikes
+    it 'Should return the correct score after multiple strikes has been played' do
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 4)
+      @scorecard.add_frame(2, 5)
+      @scorecard.add_frame(1, 10)  
+      @scorecard.add_frame(1, 6)
+      @scorecard.add_frame(2, 2)
+      @scorecard.add_frame(1, 3) 
+      @scorecard.add_frame(2, 3)
+      expect(@scorecard.calculate_score).to eq(60)
+    end
 
     # Score after multiple spares 
 
+    # Score after a strike then a spare then a normal frame 
+
+    # Score after a spare then a strike then a normal frame 
+
+    # Score after multiple strikes and multiple spares 
+
     # Perfect game (Round 10 strike)
+    
+    # Full spare game
 
     # Gutter game 
 
