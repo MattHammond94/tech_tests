@@ -47,6 +47,7 @@ RSpec.describe Scorecard do
       end
     end
 
+    
     # Need to add logic for the possibility of a third round on bonus frame. 
     # Check that no error is returned on final round if there IS a bonus round 
     # Check there is an error if there IS a bonus round but roll is greater than 3
@@ -107,24 +108,97 @@ RSpec.describe Scorecard do
       @scorecard.add_frame(2, 5)
       @scorecard.add_frame(1, 2)
       @scorecard.add_frame(2, 3)
-      p @scorecard.total_score
-      p @scorecard.bonus_points
-      # bonus_points should be 8 total => currently returning 6 bonus points are only be applied after the first spare.
       expect(@scorecard.calculate_score).to eq(41)
     end
 
-    # Score after a strike then a spare then a normal frame 
+    it 'Should return the correct score when a strike has been followed by a spare' do 
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      @scorecard.add_frame(1, 2)
+      @scorecard.add_frame(2, 3)
+      expect(@scorecard.calculate_score).to eq(37)
+    end
 
-    # Score after a spare then a strike then a normal frame 
+    it 'Should return the correct score when a spare has been followed by a strike' do 
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 2)
+      @scorecard.add_frame(1, 3)
+      expect(@scorecard.calculate_score).to eq(40)
+    end
 
-    # Score after multiple strikes and multiple spares 
+    it 'Should return the correct result after two consecutive spares.' do 
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      @scorecard.add_frame(1, 3)
+      @scorecard.add_frame(2, 7)
+      expect(@scorecard.calculate_score).to eq(23)
+    end
 
-    # Perfect game (Round 10 strike)
-    
+    it 'Should return the correct result after a few rounds are played at random' do 
+      @scorecard.add_frame(1, 1)
+      @scorecard.add_frame(2, 4)
+      @scorecard.add_frame(1, 4)
+      @scorecard.add_frame(2, 5)
+      @scorecard.add_frame(1, 6)
+      @scorecard.add_frame(2, 4)
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 0)
+      @scorecard.add_frame(2, 1)
+      expect(@scorecard.calculate_score).to eq(61)
+    end
+
+    it 'Should return the correct result after four consecutive strikes.' do 
+      @scorecard.add_frame(1, 10)
+      p "bonus: #{@scorecard.bonus_points}"
+      p "total: #{@scorecard.total_score}"
+      p "New frame"
+      p "Current strike streak: #{@scorecard.strike_streak}"
+      @scorecard.add_frame(1, 10)
+      p "bonus: #{@scorecard.bonus_points}"
+      p "total: #{@scorecard.total_score}"
+      p "Current strike streak: #{@scorecard.strike_streak}"
+      p "New frame"
+      @scorecard.add_frame(1, 10)
+      p "bonus: #{@scorecard.bonus_points}"
+      p "total: #{@scorecard.total_score}"
+      p "New frame"
+      p "Current strike streak: #{@scorecard.strike_streak}"
+      @scorecard.add_frame(1, 10)
+      p "bonus: #{@scorecard.bonus_points}"
+      p "total: #{@scorecard.total_score}"
+      p "New frame"
+      p "Current strike streak: #{@scorecard.strike_streak}"
+      expect(@scorecard.calculate_score).to eq(90)
+    end
+
+    # it 'Should return the correct score when a perfect game has been played' do 
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   expect(@scorecard.calculate_score).to eq(300)
+    # end
+
     # Full spare game
+
+    # Normal game with a strike final round
+
+    # Normal game with a spare final round 
 
     # Gutter game 
 
-    # Round 10 spare 
   end
 end

@@ -1,6 +1,6 @@
 class Scorecard
 
-  attr_reader :current_frame, :total_score, :bonus_points
+  attr_reader :current_frame, :total_score, :bonus_points, :strike_streak
 
   def initialize
     @current_frame = 1
@@ -9,6 +9,7 @@ class Scorecard
     @bonus_points = 0
     @strike_round = false
     @spare_round = false
+    @strike_streak = 0
   end
 
   def add_frame(roll, score)
@@ -16,26 +17,27 @@ class Scorecard
 
     if @spare_round && roll == 1
       @bonus_points += score
-      @active_frame_score += score
       @spare_round = false
     end
 
-    if @strike_round
+    if @strike_round && score == 10
+      @strike_streak > 1 ? @bonus_points += 10 : nil
+      @bonus_points += 10
+      return strike
+    elsif @strike_round && roll == 2
+      @bonus_points += score
+      @strike_round = false
+      @strike_streak = 0
+    elsif @strike_round
       @bonus_points += score
     end
 
-    if @strike_round && roll == 2
-      @strike_round = false
-    end
-
     if roll == 1 && score == 10
-      strike
+      return strike
     elsif roll == 2 && @active_frame_score + score == 10
       spare(score)
     else
-      # STANDARD ROLL
-      @active_frame_score += score
-      @total_score += score
+      standard_roll(score)
     end
 
     if roll == 2
@@ -49,9 +51,10 @@ class Scorecard
 
   private
 
-  def strike 
+  def strike
     @total_score += 10
     @current_frame += 1
+    @strike_streak += 1
     @strike_round = true
   end
 
@@ -59,6 +62,11 @@ class Scorecard
     @total_score += score 
     @active_frame_score = 0
     @spare_round = true
+  end
+
+  def standard_roll(score)
+    @active_frame_score += score
+    @total_score += score
   end
 
   def end_frame
