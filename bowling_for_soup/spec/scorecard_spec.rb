@@ -14,7 +14,9 @@ RSpec.describe Scorecard do
       it 'Should increase the frame count after two frames have been played' do
         @scorecard.add_frame(1, 4)
         @scorecard.add_frame(2, 4)
-        expect(@scorecard.current_frame).to eq(2)
+        @scorecard.add_frame(1, 4)
+        @scorecard.add_frame(2, 4)
+        expect(@scorecard.current_frame).to eq(3)
       end
 
       it 'Should increase the frame count if a strike has been played' do 
@@ -46,11 +48,6 @@ RSpec.describe Scorecard do
         expect{ (@scorecard.add_frame(nil, nil)) }.to raise_error(ArgumentError, "Score and roll must be Integer data types.")
       end
     end
-
-    
-    # Need to add logic for the possibility of a third round on bonus frame. 
-    # Check that no error is returned on final round if there IS a bonus round 
-    # Check there is an error if there IS a bonus round but roll is greater than 3
   end
 
   context 'Calculating a score' do 
@@ -152,47 +149,103 @@ RSpec.describe Scorecard do
       expect(@scorecard.calculate_score).to eq(61)
     end
 
-    it 'Should return the correct result after four consecutive strikes.' do 
+    it 'Should return the correct result after nine consecutive strikes.' do 
       @scorecard.add_frame(1, 10)
-      p "bonus: #{@scorecard.bonus_points}"
-      p "total: #{@scorecard.total_score}"
-      p "New frame"
-      p "Current strike streak: #{@scorecard.strike_streak}"
       @scorecard.add_frame(1, 10)
-      p "bonus: #{@scorecard.bonus_points}"
-      p "total: #{@scorecard.total_score}"
-      p "Current strike streak: #{@scorecard.strike_streak}"
-      p "New frame"
       @scorecard.add_frame(1, 10)
-      p "bonus: #{@scorecard.bonus_points}"
-      p "total: #{@scorecard.total_score}"
-      p "New frame"
-      p "Current strike streak: #{@scorecard.strike_streak}"
       @scorecard.add_frame(1, 10)
-      p "bonus: #{@scorecard.bonus_points}"
-      p "total: #{@scorecard.total_score}"
-      p "New frame"
-      p "Current strike streak: #{@scorecard.strike_streak}"
-      expect(@scorecard.calculate_score).to eq(90)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      expect(@scorecard.calculate_score).to eq(240)
     end
 
-    # it 'Should return the correct score when a perfect game has been played' do 
-    #   @scorecard.add_frame(1, 10)
-    #   @scorecard.add_frame(1, 10)
-    #   @scorecard.add_frame(1, 10)
-    #   @scorecard.add_frame(1, 10)
-    #   @scorecard.add_frame(1, 10)
-    #   @scorecard.add_frame(1, 10)
-    #   @scorecard.add_frame(1, 10)
-    #   @scorecard.add_frame(1, 10)
-    #   @scorecard.add_frame(1, 10)
-    #   @scorecard.add_frame(1, 10)
-    #   @scorecard.add_frame(1, 10)
-    #   @scorecard.add_frame(1, 10)
-    #   expect(@scorecard.calculate_score).to eq(300)
-    # end
+    it 'Should return the correct score when a perfect game has been played' do 
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      @scorecard.add_frame(1, 10)
+      p "Current frame: #{@scorecard.current_frame}"
+      p "bonus: #{@scorecard.bonus_points}"
+      p "total: #{@scorecard.total_score}"
+      p "New frame"
+      p "Current strike streak: #{@scorecard.strike_streak}"
+      expect(@scorecard.calculate_score).to eq(300)
+    end
 
     # Full spare game
+    it 'Should return the correct score after a full game of spares and one bonus round' do
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      #2
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      #3
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      #4
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      #5
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      #6
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      #7
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      #8
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      #9
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      p "Current frame score: #{@scorecard.calculate_score}"
+      #10
+      @scorecard.add_frame(1, 5)
+      @scorecard.add_frame(2, 5)
+      p "Current frame score: #{@scorecard.calculate_score}"
+      p "Current frame is #{@scorecard.current_frame}"
+      @scorecard.add_frame(1, 5)
+      expect(@scorecard.calculate_score).to eq(150)
+    end
+
+
+    # 10 strikes then a normal bonus round.
+
+    # it 'Should return the correct score when a 10 strikes are followed by a normal bonus round' do 
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 10)
+    #   @scorecard.add_frame(1, 4)
+    #   @scorecard.add_frame(2, 3)
+    #   p "Current frame: #{@scorecard.current_frame}"
+    #   p "bonus: #{@scorecard.bonus_points}"
+    #   p "total: #{@scorecard.total_score}"
+    #   p "New frame"
+    #   p "Current strike streak: #{@scorecard.strike_streak}"
+    #   expect(@scorecard.calculate_score).to eq(281)
+    # end
+
+    # 10 spares then a normal bonus round 
 
     # Normal game with a strike final round
 
@@ -200,5 +253,44 @@ RSpec.describe Scorecard do
 
     # Gutter game 
 
+  end
+
+
+
+
+
+
+  context 'When a game has been completed' do 
+    it 'Should successfully reset the score after a standard game (No bonus rounds) are played' do
+      @scorecard.add_frame(1, 2)
+      @scorecard.add_frame(2, 2)
+      @scorecard.add_frame(1, 2)
+      @scorecard.add_frame(2, 2)
+      @scorecard.add_frame(1, 2)
+      @scorecard.add_frame(2, 2)
+      @scorecard.add_frame(1, 2)
+      @scorecard.add_frame(2, 2)
+      @scorecard.add_frame(1, 2)
+      @scorecard.add_frame(2, 2)
+      @scorecard.add_frame(1, 2)
+      @scorecard.add_frame(2, 2)
+      @scorecard.add_frame(1, 2)
+      @scorecard.add_frame(2, 2)
+      @scorecard.add_frame(1, 2)
+      @scorecard.add_frame(2, 2)
+      @scorecard.add_frame(1, 2)
+      @scorecard.add_frame(2, 2)
+      @scorecard.add_frame(1, 2)
+      @scorecard.add_frame(2, 2)
+      @scorecard.add_frame(1, 5)
+      expect(@scorecard.current_frame).to eq(1)
+      expect(@scorecard.bonus_points).to eq(0)
+      expect(@scorecard.total_score).to eq(5)
+      expect(@scorecard.active_frame_score).to eq(5)
+    end
+
+    # Need to add logic for the possibility of a third round on bonus frame. 
+    # Check that no error is returned on final round if there IS a bonus round 
+    # Check there is an error if there IS a bonus round but roll is greater than 3
   end
 end
