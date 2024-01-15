@@ -15,16 +15,15 @@ class Scorecard
   def add_frame(roll, score)
     error_catcher(roll, score)
 
-    # How many scenarios?
-    # For frames greater than 10 ():
     if @current_frame > 10
-      if @strike_round && @current_frame == 11 && score != 10
-        @total_score += score * 2
+      # Strike in the 10th followed by another strike 
+      if @strike_round && @current_frame == 11 && score == 10
+        return strike
+      elsif @strike_round && @current_frame == 11 && score != 10
+        @total_score += score * 2 
         return @strike_round = false
       elsif !@strike_round && @current_frame == 12 && roll == 2
         return @total_score
-      elsif @current_frame == 11 && roll == 1 && score == 10
-        return strike
       elsif @current_frame == 12 && roll == 1 && score == 10
         @bonus_points += 10 
         return strike
@@ -32,7 +31,7 @@ class Scorecard
       elsif @current_frame == 11 && @spare_round 
         return @bonus_points += score
       else 
-        "else2"
+        nil
       end
     end
 
