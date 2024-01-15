@@ -4,18 +4,15 @@ class LetterCounter
   end
 
   def calculate_most_common()
-    counter = Hash.new(1)
-    most_common = nil
-    most_common_count = 1
+    counter = Hash.new(0)
+    p @text.chars
+
     @text.chars.each do |char|
       next unless is_letter?(char)
-      counter[char] = (counter[char] || 1) + 1
-      if counter[char] > most_common_count
-        most_common = char
-        most_common_count += counter[char]
-      end
+      counter[char] += 1
     end
-    return [most_common_count, most_common]
+
+    return counter.max_by { |k, v| v }.reverse
   end
 
   private
@@ -24,6 +21,3 @@ class LetterCounter
     return letter =~ /[a-z]/i
   end
 end
-
-counter = LetterCounter.new("Digital Punk")
-p counter.calculate_most_common
