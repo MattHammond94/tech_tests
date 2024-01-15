@@ -5,13 +5,10 @@ class LetterCounter
 
   def calculate_most_common()
     counter = Hash.new(0)
-    p @text.chars
-
     @text.chars.each do |char|
       next unless is_letter?(char)
       counter[char] += 1
     end
-
     return counter.max_by { |k, v| v }.reverse
   end
 
